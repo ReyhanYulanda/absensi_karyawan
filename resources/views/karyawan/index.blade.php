@@ -31,4 +31,3 @@
         </table>
     </div>
 </x-app-layout>
-
