@@ -17,7 +17,7 @@
 
             <div>
                 <label for="username">Username</label>
-                <input type="username" name="username" id="username" required>
+                <input type="text" name="username" id="username" required>
                 <x-input-error :messages="$errors->get('username')" class="mt-2" />
             </div>
 
@@ -31,6 +31,17 @@
                 <label for="password_confirmation">Konfirmasi Password</label>
                 <input type="password" name="password_confirmation" id="password_confirmation" required>
                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+            </div>
+
+            <div>
+                <label for="role">Role</label>
+                <select name="role" id="role" required
+                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                    <option value="">-- Pilih Role --</option>
+                    <option value="admin">Admin</option>
+                    <option value="karyawan">Karyawan</option>
+                </select>
+                <x-input-error :messages="$errors->get('role')" class="mt-2" />
             </div>
 
             <x-primary-button>
