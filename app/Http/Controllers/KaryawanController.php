@@ -54,13 +54,20 @@ class KaryawanController extends Controller
         $user = User::findOrFail($id);
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username,' . $id,
-            'role' => 'required|in:admin,karyawan',
-            'status' => 'required|boolean',
+            'name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', 'unique:users,username,' . $id],
+            'role' => ['required', 'in:admin,karyawan'],
+            'status' => ['required', 'boolean'],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);
 
-        $user->update($request->all());
+        $data = $request->only(['name', 'username', 'role', 'status']);
+
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password);
+        }
+
+        $user->update($data);
 
         return redirect()->route('karyawan.index')->with('success', 'Data karyawan berhasil diperbarui!');
     }

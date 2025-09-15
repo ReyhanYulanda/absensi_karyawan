@@ -2,7 +2,6 @@
     <div class="max-w-4xl mx-auto p-6">
         <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6">✏️ Edit Karyawan</h2>
 
-        {{-- Notifikasi sukses/error --}}
         @if(session('success'))
             <div class="mb-4 p-4 rounded-lg bg-green-100 border border-green-300 text-green-800">
                 ✅ {{ session('success') }}
@@ -23,23 +22,20 @@
             @csrf
             @method('PUT')
 
-            {{-- Nama --}}
             <div class="mb-4">
                 <label for="name" class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Nama</label>
                 <input type="text" name="name" id="name"
-                       value="{{ old('name', $user->name) }}"
-                       class="w-full border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                    value="{{ old('name', $user->name) }}"
+                    class="w-full border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
             </div>
 
-            {{-- Username --}}
             <div class="mb-4">
                 <label for="username" class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Username</label>
                 <input type="text" name="username" id="username"
-                       value="{{ old('username', $user->username) }}"
-                       class="w-full border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                    value="{{ old('username', $user->username) }}"
+                    class="w-full border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
             </div>
 
-            {{-- Role --}}
             <div class="mb-4">
                 <label for="role" class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Role</label>
                 <select name="role" id="role"
@@ -49,7 +45,6 @@
                 </select>
             </div>
 
-            {{-- Status --}}
             <div class="mb-4">
                 <label for="status" class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Status</label>
                 <select name="status" id="status"
@@ -59,10 +54,27 @@
                 </select>
             </div>
 
-            {{-- Tombol --}}
+            <div class="mb-4">
+                <label for="password" class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    Password Baru <span class="text-sm text-gray-500">(opsional)</span>
+                </label>
+                <input type="password" name="password" id="password"
+                    class="w-full border-gray-300 dark:border-gray-600 rounded-lg shadow-sm 
+                            focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+            </div>
+
+            <div class="mb-4">
+                <label for="password_confirmation" class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    Konfirmasi Password
+                </label>
+                <input type="password" name="password_confirmation" id="password_confirmation"
+                    class="w-full border-gray-300 dark:border-gray-600 rounded-lg shadow-sm 
+                            focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+            </div>
+
             <div class="flex items-center justify-between mt-6">
                 <a href="{{ route('karyawan.index') }}"
-                   class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg shadow">
+                    class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg shadow">
                     ⬅️ Kembali
                 </a>
                 <button type="submit"
