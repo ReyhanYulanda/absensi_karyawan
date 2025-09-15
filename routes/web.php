@@ -21,9 +21,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index');
     Route::post('/absensi', [AbsensiController::class, 'store'])->name('absensi.store');
 
-    Route::get('/karyawan', [KaryawanController::class, 'index'])->name('karyawan.index');
-    Route::get('/tambah-karyawan', [KaryawanController::class, 'create'])->name('karyawan.create');
-    Route::post('/tambah-karyawan', [KaryawanController::class, 'store'])->name('karyawan.store');
+    Route::resource('karyawan', KaryawanController::class);
+
 });
 
 require __DIR__.'/auth.php';

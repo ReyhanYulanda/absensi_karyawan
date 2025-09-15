@@ -11,6 +11,7 @@ use Illuminate\Validation\Rules;
 
 class KaryawanController extends Controller
 {
+
     public function index(): View
     {
         $users = User::all();
@@ -40,5 +41,35 @@ class KaryawanController extends Controller
         ]);
 
         return redirect(route('karyawan.index'))->with('success', 'Karyawan berhasil ditambahkan');
+    }
+
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        return view('admin.editKaryawan', compact('user'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username,' . $id,
+            'role' => 'required|in:admin,karyawan',
+            'status' => 'required|boolean',
+        ]);
+
+        $user->update($request->all());
+
+        return redirect()->route('karyawan.index')->with('success', 'Data karyawan berhasil diperbarui!');
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('karyawan.index')->with('success', 'Karyawan berhasil dihapus!');
     }
 }

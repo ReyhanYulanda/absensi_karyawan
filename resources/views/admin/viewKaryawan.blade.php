@@ -47,20 +47,22 @@
                             </td>
                             <td class="px-4 py-3">{{ $user->created_at->timezone('Asia/Makassar')->format('d M Y H:i') }}</td>
                             <td class="px-4 py-3 text-center space-x-2">
-                                <a href=""
-                                   class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-md text-xs shadow">
-                                    ✏️ Edit
-                                </a>
-                                <form action="" method="POST" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                            class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-xs shadow"
-                                            onclick="return confirm('Yakin ingin menghapus karyawan ini?')">
-                                        🗑 Hapus
-                                    </button>
-                                </form>
-                            </td>
+                            <a href="{{ route('karyawan.edit', $user->id) }}"
+                            class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-md text-xs shadow dark:shadow-gray-900">
+                                ✏️ Edit
+                            </a>
+                            <form action="{{ route('karyawan.destroy', $user->id) }}" 
+                                method="POST" 
+                                class="inline"
+                                onsubmit="return confirm('Yakin ingin menghapus karyawan ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                        class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-xs shadow dark:shadow-gray-900">
+                                    🗑 Hapus
+                                </button>
+                            </form>
+                        </td>
                         </tr>
                     @endforeach
                 </tbody>
