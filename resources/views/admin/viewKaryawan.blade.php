@@ -51,16 +51,15 @@
                             class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-md text-xs shadow dark:shadow-gray-900">
                                 ✏️ Edit
                             </a>
-                            <form action="{{ route('karyawan.destroy', $user->id) }}" 
+                            <form id="delete-form-{{ $user->id }}" 
+                                action="{{ route('karyawan.destroy', $user->id) }}" 
                                 method="POST" 
-                                class="inline"
-                                onsubmit="return confirm('Yakin ingin menghapus karyawan ini?')">
+                                class="inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit"
-                                        class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-xs shadow dark:shadow-gray-900">
+                                <x-delete-button :form-id="'delete-form-' . $user->id" :message="'Data karyawan akan dihapus permanen!'">
                                     🗑 Hapus
-                                </button>
+                                </x-delete-button>
                             </form>
                         </td>
                         </tr>
