@@ -23,16 +23,15 @@
                         <th class="px-4 py-3">Username</th>
                         <th class="px-4 py-3">Role</th>
                         <th class="px-4 py-3">Status</th>
-                        <th class="px-4 py-3">Tanggal Dibuat</th>
                         <th class="px-4 py-3 text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                     @foreach($users as $user)
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-                            <td class="px-4 py-3">{{ $loop->iteration }}</td>
+                            <td class="px-4 py-3 font-semibold text-gray-800 dark:text-gray-200">{{ $loop->iteration }}</td>
                             <td class="px-4 py-3 font-semibold text-gray-800 dark:text-gray-200">{{ $user->name }}</td>
-                            <td class="px-4 py-3">{{ $user->username }}</td>
+                            <td class="px-4 py-3 font-semibold text-gray-800 dark:text-gray-200">{{ $user->username }}</td>
                             <td class="px-4 py-3">
                                 <span class="px-3 py-1 rounded-full text-xs font-medium
                                     {{ $user->role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700' }}">
@@ -45,12 +44,10 @@
                                     {{ $user->status ? 'Aktif' : 'Tidak Aktif' }}
                                 </span>
                             </td>
-                            <td class="px-4 py-3">{{ $user->created_at->timezone('Asia/Makassar')->format('d M Y H:i') }}</td>
                             <td class="px-4 py-3 text-center space-x-2">
-                            <a href="{{ route('karyawan.edit', $user->id) }}"
-                            class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-md text-xs shadow dark:shadow-gray-900">
-                                ✏️ Edit
-                            </a>
+                            <x-edit-button :href="route('karyawan.edit', $user->id)">
+                                Edit
+                            </x-edit-button>
                             <form id="delete-form-{{ $user->id }}" 
                                 action="{{ route('karyawan.destroy', $user->id) }}" 
                                 method="POST" 
@@ -58,7 +55,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <x-delete-button :form-id="'delete-form-' . $user->id" :message="'Data karyawan akan dihapus permanen!'">
-                                    🗑 Hapus
+                                    Hapus
                                 </x-delete-button>
                             </form>
                         </td>

@@ -18,7 +18,7 @@
             </div>
         @endif
 
-        <form action="{{ route('karyawan.update', $user->id) }}" method="POST" class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+        <form id="form-karyawan" action="{{ route('karyawan.update', $user->id) }}" method="POST" class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
             @csrf
             @method('PUT')
 
@@ -73,14 +73,12 @@
             </div>
 
             <div class="flex items-center justify-between mt-6">
-                <a href="{{ route('karyawan.index') }}"
-                    class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg shadow">
-                    ⬅️ Kembali
-                </a>
-                <button type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow">
-                    💾 Simpan Perubahan
-                </button>
+                <x-cancel-button :href="route('karyawan.index')">
+                    Batal
+                </x-cancel-button>
+                <x-save-button :formId="'form-karyawan'" :message="'Yakin ingin mengubah data ini?'"> 
+                    Simpan Perubahan
+                </x-save-button>
             </div>
         </form>
     </div>
