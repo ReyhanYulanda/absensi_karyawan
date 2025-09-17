@@ -33,8 +33,26 @@
             </main>
         </div>
 
+        {{-- Sweetalert --}}
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
+            function confirmSave(formId, message) {
+                Swal.fire({
+                    title: 'Konfirmasi',
+                    text: message,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#2563eb',
+                    cancelButtonColor: '#6b7280',
+                    confirmButtonText: 'Ya, simpan',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById(formId).submit();
+                    }
+                })
+            }
+
             function confirmDelete(formId, message) {
                 Swal.fire({
                     title: 'Konfirmasi',
