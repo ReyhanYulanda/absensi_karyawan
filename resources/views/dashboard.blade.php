@@ -54,6 +54,10 @@
                             Reset
                         </a>
                     @endif
+                    <a href="{{ route('absensi.export', request()->query()) }}" 
+                        class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow">
+                        Download Excel
+                    </a>
                 </div>
             </form>
         </div>
