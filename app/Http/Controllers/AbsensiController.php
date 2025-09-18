@@ -14,9 +14,30 @@ class AbsensiController extends Controller
     {
         $absensi = Absensi::where('user_id', Auth::id())
                 ->latest()
-                ->paginate(5); // tampilkan 5 data per halaman
+                ->paginate(5);
                 
         return view('karyawan.index', compact('absensi'));
+    }
+
+    public function adminIndex(Request $request)
+    {
+        $absensi = Absensi::with('user')
+            ->when($request->user_id, fn($q) => $q->where('user_id', $request->user_id))
+            ->when($request->date_only, fn($q) => 
+                $q->whereDate('time', $request->date_only))
+            ->when(!$request->date_only && $request->start_date, fn($q) => 
+                $q->whereDate('time', '>=', $request->start_date))
+            ->when(!$request->date_only && $request->end_date, fn($q) => 
+                $q->whereDate('time', '<=', $request->end_date))
+            // ✅ Default tampilkan absensi hari ini kalau tidak ada filter sama sekali
+            ->when(!$request->date_only && !$request->start_date && !$request->end_date, fn($q) => 
+                $q->whereDate('time', now()->timezone('Asia/Makassar')->toDateString()))
+            ->latest()
+            ->paginate(10);
+
+        $users = \App\Models\User::orderBy('name')->get();
+
+        return view('dashboard', compact('absensi', 'users'));
     }
 
     public function store(Request $request, ImageService $imageService)

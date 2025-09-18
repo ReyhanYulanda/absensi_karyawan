@@ -72,6 +72,7 @@
                     <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
                         <tr>
                             <th class="px-4 py-2 text-left">Tanggal</th>
+                            <th class="px-4 py-2 text-left">Jam</th>
                             <th class="px-4 py-2 text-left">Status</th>
                             <th class="px-4 py-2 text-left">Foto</th>
                         </tr>
@@ -79,7 +80,8 @@
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                         @foreach($absensi as $a)
                         <tr>
-                            <td class="px-4 py-2 text-gray-800 dark:text-gray-200">{{ \Carbon\Carbon::parse($a->time)->timezone('Asia/Makassar')->format('d-m-Y H:i:s') }}</td>
+                            <td class="px-4 py-2 text-gray-800 dark:text-gray-200">{{ \Carbon\Carbon::parse($a->time)->timezone('Asia/Makassar')->format('d-m-Y') }}</td>
+                            <td class="px-4 py-2 text-gray-800 dark:text-gray-200">{{ \Carbon\Carbon::parse($a->time)->timezone('Asia/Makassar')->format('H:i:s') }}</td>
                             <td class="px-4 py-2">
                                 <span class="px-3 py-1 rounded-full text-sm font-semibold
                                     {{ $a->status === 'masuk' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
