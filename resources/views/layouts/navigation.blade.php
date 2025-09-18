@@ -82,9 +82,11 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('absensi.index')" :active="request()->routeIs('absensi.index')">
-                {{ __('Absensi Karyawan') }}
-            </x-responsive-nav-link>
+            @if(auth()->check() && auth()->user()->role === 'karyawan')
+                <x-responsive-nav-link :href="route('absensi.index')" :active="request()->routeIs('absensi.index')">
+                    {{ __('Absensi Karyawan') }}
+                </x-responsive-nav-link>
+            @endif
             <x-responsive-nav-link :href="route('karyawan.index')" :active="request()->routeIs('karyawan.index')">
                 {{ __('Karyawan') }}
             </x-responsive-nav-link>
