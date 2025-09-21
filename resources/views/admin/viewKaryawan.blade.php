@@ -14,7 +14,7 @@
         @endif
 
         <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow-md rounded-lg">
-            <table class="w-full text-xs sm:text-sm text-left border-collapse">
+            <table class="w-full text-sm text-left border-collapse">
                 <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
                     <tr>
                         <th class="px-4 py-3">No</th>
