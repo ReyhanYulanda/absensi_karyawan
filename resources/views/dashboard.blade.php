@@ -1,10 +1,4 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h1 class="font-bold text-2xl text-gray-800 dark:text-gray-200">
-            {{ __('Data Absensi Semua Karyawan') }}
-        </h1>
-    </x-slot>
-
     <div class="max-w-6xl mx-auto py-8 px-4">
         <!-- Filter -->
         <div class="mb-6 bg-white dark:bg-gray-800 rounded-xl shadow p-4">
