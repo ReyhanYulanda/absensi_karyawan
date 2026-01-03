@@ -2,10 +2,9 @@
     <div class="max-w-7xl mx-auto p-6">
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200">👥 Daftar Karyawan</h2>
-            <a href="{{ route('karyawan.create') }}"
-               class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow">
-                ➕ Tambah Karyawan
-            </a>
+            <x-create-button :href="route('karyawan.create')">
+                Tambah karyawan
+            </x-create-button>
         </div>
 
         @if(session('success'))
@@ -39,26 +38,28 @@
                                 </span>
                             </td>
                             <td class="px-4 py-3">
-                                <span class="px-3 py-1 rounded-full text-xs font-medium
+                                <span class="inline-block px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap
                                     {{ $user->status ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
                                     {{ $user->status ? 'Aktif' : 'Tidak Aktif' }}
                                 </span>
                             </td>
-                            <td class="px-4 py-3 text-center space-x-2">
-                            <x-edit-button :href="route('karyawan.edit', $user->id)">
-                                Edit
-                            </x-edit-button>
-                            <form id="delete-form-{{ $user->id }}" 
-                                action="{{ route('karyawan.destroy', $user->id) }}" 
-                                method="POST" 
-                                class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <x-delete-button :form-id="'delete-form-' . $user->id" :message="'Data karyawan akan dihapus permanen!'">
-                                    Hapus
-                                </x-delete-button>
-                            </form>
-                        </td>
+                            <td class="px-4 py-3 text-center">
+                                <div class="flex flec justify-center gap-2">
+                                    <x-edit-button :href="route('karyawan.edit', $user->id)">
+                                        Edit
+                                    </x-edit-button>
+                                    <form id="delete-form-{{ $user->id }}" 
+                                        action="{{ route('karyawan.destroy', $user->id) }}" 
+                                        method="POST" 
+                                        class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <x-delete-button :form-id="'delete-form-' . $user->id" :message="'Data karyawan akan dihapus permanen!'">
+                                            Hapus
+                                        </x-delete-button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

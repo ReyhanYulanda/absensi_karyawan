@@ -1,16 +1,9 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h1 class="font-bold text-2xl text-gray-800 dark:text-gray-200">
-            {{ __('Data Absensi Semua Karyawan') }}
-        </h1>
-    </x-slot>
-
     <div class="max-w-6xl mx-auto py-8 px-4">
         <!-- Filter -->
         <div class="mb-6 bg-white dark:bg-gray-800 rounded-xl shadow p-4">
-            <form method="GET" action="{{ route('dashboard') }}" class="flex flex-wrap items-end gap-4" id="filterForm">
-                <!-- Filter Karyawan -->
-                <div>
+            <form method="GET" action="{{ route('dashboard') }}" class="flex flex-col sm:flex-row sm:flex-wrap sm:items-end gap-4" id="filterForm">
+                <div class="flex flex-col">
                     <label for="user_id" class="font-semibold text-gray-700 dark:text-gray-300">Karyawan:</label>
                     <select name="user_id" id="user_id" 
                         class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
@@ -23,27 +16,24 @@
                     </select>
                 </div>
 
-                <!-- Filter 1 Tanggal -->
-                <div>
+                <div class="flex flex-col">
                     <label for="date_only" class="font-semibold text-gray-700 dark:text-gray-300">Tanggal:</label>
                     <input type="date" name="date_only" id="date_only" value="{{ request('date_only') }}"
                         class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
                 </div>
 
-                <!-- Filter Range Tanggal -->
-                <div>
+                <div class="flex flex-col">
                     <label for="start_date" class="font-semibold text-gray-700 dark:text-gray-300">Dari:</label>
                     <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}"
                         class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
                 </div>
-                <div>
+                <div class="flex flex-col">
                     <label for="end_date" class="font-semibold text-gray-700 dark:text-gray-300">Sampai:</label>
                     <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}"
                         class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
                 </div>
 
-                <!-- Tombol -->
-                <div class="flex items-center gap-2">
+                <div class="flex flex-wrap gap-2">
                     <button type="submit" 
                         class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow">
                         Cari
@@ -92,10 +82,29 @@
                                 </span>
                             </td>
                             <td class="px-4 py-2">
-                                @if($a->photo)
-                                    <img src="{{ asset('storage/' . $a->photo) }}" 
-                                         alt="Foto Absensi" 
-                                         class="w-16 h-16 rounded-lg object-cover shadow">
+                                @if ($a->photo)
+                                    <div x-data="{ open: false }">
+                                        <img
+                                            src="{{ asset('storage/' . $a->photo) }}"
+                                            alt="Foto Absensi"
+                                            class="w-16 h-16 rounded-lg object-cover shadow cursor-pointer"
+                                            @click="open = true"
+                                        >
+
+                                        <div
+                                            x-show="open"
+                                            x-transition
+                                            class="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+                                            @click.self="open = false"
+                                        >
+                                            <div class="bg-white p-4 rounded-xl max-w-xl">
+                                                <img
+                                                    src="{{ asset('storage/' . $a->photo) }}"
+                                                    class="max-h-[80vh] rounded-lg"
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
                                 @else
                                     <span class="text-gray-500">-</span>
                                 @endif

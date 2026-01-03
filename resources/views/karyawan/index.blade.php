@@ -15,7 +15,7 @@
                         icon: "success",
                         confirmButtonText: "OK",
                         color: "#000",
-                        background: "#86efac", // hijau soft
+                        background: "#86efac", 
                         confirmButtonColor: "#15803d",
                         width: "35em",
                         customClass: {
@@ -27,13 +27,11 @@
             </script>
         @endif
 
-        <!-- Lokasi tampil di sini -->
         <div class="mb-6 p-4 rounded-lg bg-blue-50 border border-blue-200">
             <h4 class="font-semibold text-lg text-blue-800 mb-2">📍 Lokasi Anda:</h4>
             <p id="location" class="text-blue-600 font-medium">Sedang mengambil lokasi...</p>
         </div>
 
-        <!-- Form Absensi -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
             <form id="absensiForm" action="{{ route('absensi.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
@@ -64,7 +62,6 @@
             </form>
         </div>
 
-        <!-- Riwayat Absensi -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
             <h4 class="font-bold text-lg text-gray-800 dark:text-gray-200 mb-4">📜 Riwayat Absensi</h4>
             <div class="overflow-x-auto">
@@ -89,8 +86,29 @@
                                 </span>
                             </td>
                             <td class="px-4 py-2">
-                                @if($a->photo)
-                                    <img src="{{ asset('storage/' . $a->photo) }}" alt="Foto Absensi" class="w-20 h-20 rounded-lg object-cover shadow">
+                                @if ($a->photo)
+                                    <div x-data="{ open: false }">
+                                        <img
+                                            src="{{ asset('storage/' . $a->photo) }}"
+                                            alt="Foto Absensi"
+                                            class="w-16 h-16 rounded-lg object-cover shadow cursor-pointer"
+                                            @click="open = true"
+                                        >
+
+                                        <div
+                                            x-show="open"
+                                            x-transition
+                                            class="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+                                            @click.self="open = false"
+                                        >
+                                            <div class="bg-white p-4 rounded-xl max-w-xl">
+                                                <img
+                                                    src="{{ asset('storage/' . $a->photo) }}"
+                                                    class="max-h-[80vh] rounded-lg"
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
                                 @else
                                     <span class="text-gray-500">-</span>
                                 @endif
@@ -101,7 +119,6 @@
                 </table>
             </div>
 
-            <!-- Pagination -->
             <div class="mt-4">
                 {{ $absensi->links() }}
             </div>
@@ -109,14 +126,12 @@
 
 
     <script>
-        // Tampilkan lokasi begitu halaman dibuka
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 document.getElementById("location").innerHTML =
                     "Latitude: " + position.coords.latitude +
                     "<br>Longitude: " + position.coords.longitude;
 
-                // isi hidden input juga
                 document.getElementById("latitude").value = position.coords.latitude;
                 document.getElementById("longitude").value = position.coords.longitude;
 
@@ -128,22 +143,20 @@
             document.getElementById("location").innerHTML = "❌ Browser tidak mendukung Geolocation.";
         }
 
-        // Set lokasi sebelum submit form
         function setLocation() {
             if (document.getElementById("latitude").value && document.getElementById("longitude").value) {
-                return true; // lanjut submit form
+                return true; 
             } else {
                 alert("Lokasi belum berhasil diambil. Coba lagi.");
                 return false;
             }
         }
 
-        // Alert button
         function confirmAbsen(status) {
             let message = status === "masuk" 
                 ? "Apakah Anda yakin ingin ABSEN MASUK?" 
                 : "Apakah Anda yakin ingin ABSEN PULANG?";
-            let bgColor = status === "masuk" ? "#86efac" : "#fca5a5"; // hijau / merah
+            let bgColor = status === "masuk" ? "#86efac" : "#fca5a5"; 
 
             Swal.fire({
                 title: message,
@@ -151,7 +164,7 @@
                 confirmButtonText: 'Ya, Lanjutkan',
                 cancelButtonText: 'Batal',
                 reverseButtons: true,
-                color: "#000", // teks hitam
+                color: "#000", 
                 background: bgColor,
                 confirmButtonColor: "#15803d",
                 cancelButtonColor: "#6b7280",
@@ -166,7 +179,6 @@
                     let lng = document.getElementById("longitude").value;
                     let photo = document.getElementById("photo");
 
-                    // 🔴 Validasi lokasi
                     if (!lat || !lng) {
                         Swal.fire({
                             title: "Gagal Absen",
@@ -181,10 +193,9 @@
                                 title: "text-xl font-bold"
                             }
                         });
-                        return; // hentikan submit
+                        return; 
                     }
 
-                    // 🔴 Validasi foto
                     if (!photo.files.length) {
                         Swal.fire({
                             title: "Gagal Absen",
@@ -199,10 +210,9 @@
                                 title: "text-xl font-bold"
                             }
                         });
-                        return; // hentikan submit
+                        return; 
                     }
 
-                    // ✅ Kalau valid → submit form
                     let form = document.getElementById('absensiForm');
                     let hiddenStatus = document.createElement("input");
                     hiddenStatus.type = "hidden";
