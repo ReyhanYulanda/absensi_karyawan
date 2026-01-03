@@ -82,10 +82,29 @@
                                 </span>
                             </td>
                             <td class="px-4 py-2">
-                                @if($a->photo)
-                                    <img src="{{ asset('storage/' . $a->photo) }}" 
-                                         alt="Foto Absensi" 
-                                         class="w-16 h-16 rounded-lg object-cover shadow">
+                                @if ($a->photo)
+                                    <div x-data="{ open: false }">
+                                        <img
+                                            src="{{ asset('storage/' . $a->photo) }}"
+                                            alt="Foto Absensi"
+                                            class="w-16 h-16 rounded-lg object-cover shadow cursor-pointer"
+                                            @click="open = true"
+                                        >
+
+                                        <div
+                                            x-show="open"
+                                            x-transition
+                                            class="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+                                            @click.self="open = false"
+                                        >
+                                            <div class="bg-white p-4 rounded-xl max-w-xl">
+                                                <img
+                                                    src="{{ asset('storage/' . $a->photo) }}"
+                                                    class="max-h-[80vh] rounded-lg"
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
                                 @else
                                     <span class="text-gray-500">-</span>
                                 @endif
