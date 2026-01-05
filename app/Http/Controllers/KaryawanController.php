@@ -15,12 +15,12 @@ class KaryawanController extends Controller
     public function index(): View
     {
         $users = User::all();
-        return view('admin.viewKaryawan', compact('users'));
+        return view('admin.karyawan.viewKaryawan', compact('users'));
     }
 
     public function create(): View
     {
-        return view('admin.createKaryawan');
+        return view('admin.karyawan.createKaryawan');
     }
 
     public function store(Request $request): RedirectResponse
@@ -46,7 +46,7 @@ class KaryawanController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        return view('admin.editKaryawan', compact('user'));
+        return view('admin.karyawan.editKaryawan', compact('user'));
     }
 
     public function update(Request $request, $id)

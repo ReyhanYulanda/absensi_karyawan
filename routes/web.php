@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\KaryawanController;
+use App\Http\Controllers\SettingController;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AbsensiExport;
 
@@ -18,6 +19,9 @@ Route::middleware('auth')->group(function () {
             return Excel::download(new AbsensiExport($request), 'absensi.xlsx');
         })->name('absensi.export');
         Route::resource('karyawan', KaryawanController::class);
+
+        Route::resource('setting', SettingController::class);
+        Route::post('/settings/logo', [SettingController::class, 'updateLogo'])->name('setting.updateLogo');
     });
 
     Route::middleware('role:karyawan')->group(function () {

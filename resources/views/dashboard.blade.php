@@ -1,6 +1,5 @@
 <x-app-layout>
     <div class="max-w-6xl mx-auto py-8 px-4">
-        <!-- Filter -->
         <div class="mb-6 bg-white dark:bg-gray-800 rounded-xl shadow p-4">
             <form method="GET" action="{{ route('dashboard') }}" class="flex flex-col sm:flex-row sm:flex-wrap sm:items-end gap-4" id="filterForm">
                 <div class="flex flex-col">
@@ -52,7 +51,6 @@
             </form>
         </div>
 
-        <!-- Tabel Absensi -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
             <div class="overflow-x-auto">
                 <table class="w-full border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
@@ -147,15 +145,12 @@
         }
     }
 
-    // jalankan saat halaman dimuat
     document.addEventListener("DOMContentLoaded", toggleInputs);
 
-    // jalankan saat user mengubah input
     dateOnly.addEventListener("input", toggleInputs);
     startDate.addEventListener("input", toggleInputs);
     endDate.addEventListener("input", toggleInputs);
 
-    // kalau klik Reset → aktifkan semua input
     if (resetBtn) {
         resetBtn.addEventListener("click", function() {
             dateOnly.disabled = false;

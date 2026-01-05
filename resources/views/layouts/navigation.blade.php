@@ -11,13 +11,6 @@
                 </div>
 
                 <!-- Navigation Links -->
-                @if(auth()->check() && auth()->user()->role === 'admin')
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                            {{ __('Dashboard') }}
-                        </x-nav-link>
-                    </div>
-                @endif
                 @if(auth()->check() && auth()->user()->role === 'karyawan')
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('absensi.index')" :active="request()->routeIs('absensi.index')">
@@ -27,8 +20,20 @@
                 @endif
                 @if(auth()->check() && auth()->user()->role === 'admin')
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
+                    </div>
+               
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('karyawan.index')" :active="request()->routeIs('karyawan.index')">
                             {{ __('Karyawan') }}
+                        </x-nav-link>
+                    </div>
+                    
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('setting.index')" :active="request()->routeIs('setting.index')">
+                            {{ __('Setting') }}
                         </x-nav-link>
                     </div>
                 @endif
