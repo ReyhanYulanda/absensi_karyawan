@@ -29,7 +29,6 @@ class AbsensiController extends Controller
                 $q->whereDate('time', '>=', $request->start_date))
             ->when(!$request->date_only && $request->end_date, fn($q) => 
                 $q->whereDate('time', '<=', $request->end_date))
-            // ✅ Default tampilkan absensi hari ini kalau tidak ada filter sama sekali
             ->when(!$request->date_only && !$request->start_date && !$request->end_date, fn($q) => 
                 $q->whereDate('time', now()->timezone('Asia/Makassar')->toDateString()))
             ->latest()
@@ -37,7 +36,16 @@ class AbsensiController extends Controller
 
         $users = \App\Models\User::orderBy('name')->get();
 
-        return view('dashboard', compact('absensi', 'users'));
+        $chartData = [
+            'hadir' => 10,
+            'telat' => 2,
+            'alpha' => 1,
+            'izin' => 1,
+            'sakit' => 1,
+            'cuti' => 3,
+        ];
+
+        return view('dashboard', compact('absensi', 'users', 'chartData'));
     }
 
     public function store(Request $request, ImageService $imageService)

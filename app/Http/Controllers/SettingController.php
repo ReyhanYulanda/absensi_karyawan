@@ -83,4 +83,30 @@ class SettingController extends Controller
 
         return redirect()->back()->with('success', 'Logo berhasil diperbarui');
     }
+
+    public function updateFavicon(Request $request)
+    {
+        $request->validate([
+            'favicon' => 'required|image|mimes:png,jpg,jpeg,svg|max:2048',
+        ]);
+
+        $setting = Setting::firstOrCreate(
+            ['key' => 'app_favicon'],
+            ['value' => '']
+        );
+
+        if ($setting->value && Storage::disk('public')->exists($setting->value)) {
+            Storage::disk('public')->delete($setting->value);
+        }
+
+        $path = $request->file('favicon')->store('favicons', 'public');
+
+        $setting->update([
+            'value' => $path,
+        ]);
+
+        cache()->forget('app_favicon');
+
+        return redirect()->back()->with('success', 'Logo berhasil diperbarui');
+    }
 }

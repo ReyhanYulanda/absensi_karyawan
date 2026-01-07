@@ -37,6 +37,30 @@
             </form>
         </div>
 
+        <div class="mb-6 bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+            <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
+                🖼️ Logo Favicon
+            </h3>
+
+            <form action="{{ route('setting.updateFavicon') }}" 
+                method="POST" 
+                enctype="multipart/form-data"
+                class="flex items-center gap-4">
+                @csrf
+
+                <input type="file"
+                    name="favicon"
+                    accept="image/*"
+                    required
+                    class="block w-full text-sm text-gray-500">
+
+                <button type="submit"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    Upload
+                </button>
+            </form>
+        </div>
+
         <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow-md rounded-lg">
             <table class="w-full text-sm text-left border-collapse">
                 <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">

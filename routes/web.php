@@ -22,6 +22,7 @@ Route::middleware('auth')->group(function () {
 
         Route::resource('setting', SettingController::class);
         Route::post('/settings/logo', [SettingController::class, 'updateLogo'])->name('setting.updateLogo');
+        Route::post('/settings/favicon', [SettingController::class, 'updateFavicon'])->name('setting.updateFavicon');
     });
 
     Route::middleware('role:karyawan')->group(function () {

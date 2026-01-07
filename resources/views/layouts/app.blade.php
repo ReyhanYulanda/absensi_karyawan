@@ -10,6 +10,8 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        
+       <x-favicon />
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -33,7 +35,7 @@
             </main>
         </div>
 
-        {{-- Sweetalert --}}
+        <!-- SweetAlert2 Script -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             function confirmSave(formId, message) {
@@ -68,6 +70,18 @@
                         document.getElementById(formId).submit();
                     }
                 })
+            }
+        </script>
+
+        <!-- Theme Toggle Script -->
+        <script>
+            if (
+                localStorage.theme === 'dark' ||
+                (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+            ) {
+                document.documentElement.classList.add('dark')
+            } else {
+                document.documentElement.classList.remove('dark')
             }
         </script>
     </body>

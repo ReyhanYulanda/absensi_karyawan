@@ -1,5 +1,84 @@
 <x-app-layout>
     <div class="max-w-6xl mx-auto py-8 px-4">
+        <div class="grid grid-cols-3 md:grid-cols-3 gap-6 mb-6">
+            <div class="mb-6 bg-white dark:bg-gray-800 rounded-xl shadow p-4">
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">Karyawan</h1>
+                <p class="text-gray-600 dark:text-gray-300">
+                   10
+                </p>
+            </div>
+            <div class="mb-6 bg-white dark:bg-gray-800 rounded-xl shadow p-4">
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">Departemen</h1>
+                <p class="text-gray-600 dark:text-gray-300">
+                   5
+                </p>
+            </div>
+            <div class="mb-6 bg-white dark:bg-gray-800 rounded-xl shadow p-4">
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">Jam</h1>
+                <p class="text-gray-600 dark:text-gray-300">
+                   23:00 Wita
+                </p>
+            </div>
+        </div>
+
+        <div class="mb-6 bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+            <h2 class="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-200 text-center">
+                Statistik Presensi Karyawan
+                <span class="block text-2xl font-normal text-gray-500 dark:text-gray-400">
+                    Januari 2025
+                </span>
+            </h2>
+        
+            <div class="grid grid-cols-2 gap-6">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4">
+                    <canvas id="attendanceChart" height="200"></canvas>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-rows-3 text-3xl font-bold md:grid-rows-3 gap-4 text-center">
+                        <div class="bg-green-100 dark:bg-green-100 rounded-xl shadow border-2 border-green-300 p-4">
+                            <h1 class="text-green-600 dark:text-green-600 mb-4">Hadir</h1>
+                            <p class="text-green-600 dark:text-green-600">
+                                {{ $chartData['hadir'] }}
+                            </p>
+                        </div>
+                        <div class="bg-yellow-100 dark:bg-yellow-100 rounded-xl shadow border-2 border-yellow-300 p-4">
+                            <h1 class="text-yellow-600 dark:text-yellow-600 mb-4">Telat</h1>
+                            <p class="text-yellow-600 dark:text-yellow-600">
+                                {{ $chartData['telat'] }}
+                            </p>
+                        </div>
+                        <div class="bg-red-100 dark:bg-red-100 rounded-xl shadow border-2 border-red-300 p-4">
+                            <h1 class="text-red-600 dark:text-red-600 mb-4">Alpha</h1>
+                            <p class="text-red-600 dark:text-red-600">
+                                {{ $chartData['alpha'] }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="grid grid-rows-3 text-3xl font-bold md:grid-rows-3 gap-4 text-center">
+                        <div class="bg-blue-100 dark:bg-blue-100 rounded-xl shadow border-2 border-blue-300 p-4">
+                            <h1 class="text-blue-600 dark:text-blue-600 mb-4">Izin</h1>
+                            <p class="text-blue-600 dark:text-blue-600">
+                                {{ $chartData['izin'] }}
+                            </p>
+                        </div>
+                        <div class="bg-violet-100 dark:bg-violet-100 rounded-xl shadow border-2 border-violet-300 p-4">
+                            <h1 class="text-violet-600 dark:text-violet-600 mb-4">Sakit</h1>
+                            <p class="text-violet-600 dark:text-violet-600">
+                                {{ $chartData['sakit'] }}
+                            </p>
+                        </div>
+                        <div class="bg-slate-100 dark:bg-slate-100 rounded-xl shadow border-2 border-slate-300 p-4">
+                            <h1 class="text-slate-600 dark:text-slate-600 mb-4">Cuti</h1>
+                            <p class="text-slate-600 dark:text-slate-600">
+                                {{ $chartData['cuti'] }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="mb-6 bg-white dark:bg-gray-800 rounded-xl shadow p-4">
             <form method="GET" action="{{ route('dashboard') }}" class="flex flex-col sm:flex-row sm:flex-wrap sm:items-end gap-4" id="filterForm">
                 <div class="flex flex-col">
@@ -158,4 +237,41 @@
             endDate.disabled = false;
         });
     }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const ctx = document.getElementById('attendanceChart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Hadir', 'Telat', 'Alpha', 'Izin', 'Sakit', 'Cuti'],
+        datasets: [{
+            data: [
+                {{ $chartData['hadir'] }},
+                {{ $chartData['telat'] }},
+                {{ $chartData['alpha'] }},
+                {{ $chartData['izin'] }},
+                {{ $chartData['sakit'] }},
+                {{ $chartData['cuti'] }}
+            ],
+            backgroundColor: [
+                '#22c55e',
+                '#fdcb35ff',
+                '#ef4444',
+                '#3b82f6',
+                '#8b5cf6',
+                '#64748b'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false }
+        }
+    }
+});
 </script>
