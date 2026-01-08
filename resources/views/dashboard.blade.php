@@ -4,7 +4,7 @@
             <div class="mb-6 bg-white dark:bg-gray-800 rounded-xl shadow p-4">
                 <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">Karyawan</h1>
                 <p class="text-gray-600 dark:text-gray-300">
-                   10
+                   {{ $jumlahKaryawan }}
                 </p>
             </div>
             <div class="mb-6 bg-white dark:bg-gray-800 rounded-xl shadow p-4">
@@ -14,9 +14,9 @@
                 </p>
             </div>
             <div class="mb-6 bg-white dark:bg-gray-800 rounded-xl shadow p-4">
-                <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">Jam</h1>
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">{{ now()->format('H:i') }}</h1>
                 <p class="text-gray-600 dark:text-gray-300">
-                   23:00 Wita
+                   {{ now()->format('d-m-Y') }}
                 </p>
             </div>
         </div>

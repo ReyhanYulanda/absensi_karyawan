@@ -6,6 +6,7 @@ use App\Services\ImageService;
 use Illuminate\Http\Request;
 use App\Models\Absensi;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 
 class AbsensiController extends Controller
@@ -34,7 +35,8 @@ class AbsensiController extends Controller
             ->latest()
             ->paginate(10);
 
-        $users = \App\Models\User::orderBy('name')->get();
+        $users = User::get();
+        $jumlahKaryawan = User::where('role', '!=', 'admin')->count();
 
         $chartData = [
             'hadir' => 10,
@@ -45,7 +47,7 @@ class AbsensiController extends Controller
             'cuti' => 3,
         ];
 
-        return view('dashboard', compact('absensi', 'users', 'chartData'));
+        return view('dashboard', compact('absensi', 'users', 'jumlahKaryawan', 'chartData'));
     }
 
     public function store(Request $request, ImageService $imageService)
