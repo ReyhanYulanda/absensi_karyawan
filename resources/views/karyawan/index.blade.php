@@ -30,6 +30,7 @@
         <div class="mb-6 p-4 rounded-lg bg-blue-50 border border-blue-200">
             <h4 class="font-semibold text-lg text-blue-800 mb-2">📍 Lokasi Anda:</h4>
             <p id="location" class="text-blue-600 font-medium">Sedang mengambil lokasi...</p>
+            <div id="map" class="w-full h-64 rounded-lg border"></div>
         </div>
 
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
@@ -124,25 +125,60 @@
             </div>
         </div>
 
+    <script>
+        const officeLat = {{ config('absensi.office_lat') }};
+        const officeLng = {{ config('absensi.office_lng') }};
+        const maxRadius = {{ config('absensi.radius') }};
+    </script>
 
     <script>
+        let map;
+        let marker;
+
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                document.getElementById("location").innerHTML =
-                    "Latitude: " + position.coords.latitude +
-                    "<br>Longitude: " + position.coords.longitude;
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
 
-                document.getElementById("latitude").value = position.coords.latitude;
-                document.getElementById("longitude").value = position.coords.longitude;
+                    document.getElementById("location").innerHTML =
+                        `Latitude: ${lat}<br>Longitude: ${lng}`;
 
-            }, function(error) {
-                document.getElementById("location").innerHTML = "⚠️ Gagal mengambil lokasi. Pastikan GPS aktif & izin diberikan.";
-                console.error(error);
-            });
+                    document.getElementById("latitude").value = lat;
+                    document.getElementById("longitude").value = lng;
+
+                    map = L.map('map').setView([lat, lng], 16);
+
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    }).addTo(map);
+                    
+                    marker = L.marker([lat, lng]).addTo(map)
+                        .bindPopup("📍 Lokasi Anda")
+                        .openPopup();
+
+                    L.circle([officeLat, officeLng], {
+                        radius: maxRadius,
+                        color: 'red',
+                        fillOpacity: 0.2
+                    }).addTo(map).bindPopup("Area Absensi");
+                },
+
+                function (error) {
+                    document.getElementById("location").innerHTML =
+                        "⚠️ Gagal mengambil lokasi. Pastikan GPS aktif & izin diberikan.";
+                    console.error(error);
+                },
+                {
+                    enableHighAccuracy: true
+                }
+            );
         } else {
-            document.getElementById("location").innerHTML = "❌ Browser tidak mendukung Geolocation.";
+            document.getElementById("location").innerHTML =
+                "❌ Browser tidak mendukung Geolocation.";
         }
+    </script>
 
+    <script>
         function setLocation() {
             if (document.getElementById("latitude").value && document.getElementById("longitude").value) {
                 return true; 
@@ -220,9 +256,45 @@
                     hiddenStatus.value = status;
                     form.appendChild(hiddenStatus);
 
+                    const distance = calculateDistance(lat, lng, officeLat, officeLng);
+                    if (distance > maxRadius) {
+                        Swal.fire({
+                            title: "Di Luar Area Kantor",
+                            text: `Anda berada ± ${Math.round(distance)} meter dari kantor`,
+                            icon: "error",
+                            confirmButtonText: "OK",
+                            background: "#fecaca",
+                            color: "#000"
+                        });
+                        return;
+                    }
+
                     form.submit();
                 }
             });
         }
     </script>
+
+    <!-- Check user location in radius to present -->
+    <script>
+        function toRad(value) {
+            return value * Math.PI / 180;
+        }
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371000; // meter
+            const dLat = toRad(lat2 - lat1);
+            const dLon = toRad(lon2 - lon1);
+
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
+        }
+    </script>
+
+
 </x-app-layout>
