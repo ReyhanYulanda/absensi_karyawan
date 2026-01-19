@@ -1,3 +1,4 @@
+kok gak ada nampilin preview nya yg posisinya di live camera tapi freze karena sudah ambil foto
 <x-app-layout>
     <x-slot name="header">
         <h1 class="font-bold text-2xl text-gray-800 dark:text-gray-200">
@@ -41,24 +42,37 @@
                 <input type="hidden" name="longitude" id="longitude">
 
                 <div class="flex gap-6">
-                    <button type="button" onclick="confirmAbsen('masuk')" 
+                    <button type="button" onclick="startAbsen('masuk')" 
                         class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold text-2xl py-6 px-8 rounded-xl transition shadow-lg">
                         ✅ Absen Masuk
                     </button>
-                    <button type="button" onclick="confirmAbsen('pulang')" 
+                    <button type="button" onclick="startAbsen('pulang')" 
                         class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold text-2xl py-6 px-8 rounded-xl transition shadow-lg">
                         🚪 Absen Pulang
                     </button>
                 </div>
 
-                <div>
-                    <label for="photo" class="block font-medium text-gray-700 dark:text-gray-300 mb-3 text-lg">📸 Ambil Foto</label>
-                    <input type="file" name="photo" id="photo" accept="image/*" capture="camera" required
-                        class="block w-full text-base text-gray-600 file:mr-4 file:py-3 file:px-6
-                            file:rounded-lg file:border-0
-                            file:text-base file:font-semibold
-                            file:bg-blue-600 file:text-white
-                            hover:file:bg-blue-700 cursor-pointer">
+                <div id="cameraSection" class="hidden space-y-3">
+                    <label class="block font-medium text-gray-700 dark:text-gray-300 text-lg">
+                        📸 Kamera
+                    </label>
+
+                    <div class="relative w-full">
+                        <video id="video" autoplay playsinline
+                            class="w-full rounded-xl border shadow bg-black"></video>
+
+                        <img id="preview"
+                            class="absolute inset-0 w-full h-full object-cover rounded-xl hidden">
+                    </div>
+
+                    <canvas id="canvas" class="hidden"></canvas>
+
+                    <button type="button" onclick="capturePhoto()"
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl">
+                        📷 Ambil Foto
+                    </button>
+                    
+                    <input type="file" name="photo" id="photo" class="hidden" required>
                 </div>
             </form>
         </div>
@@ -141,6 +155,7 @@
     <script>
         let map;
         let marker;
+        let stream = null;
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -303,5 +318,124 @@
         }
     </script>
 
+    <!-- Activing Camera -->
+     <script>
+        let video = document.getElementById('video');
+        let canvas = document.getElementById('canvas');
+        let preview = document.getElementById('preview');
+    </script>
+
+    <!-- entry Absen -->
+    <script>
+        let selectedStatus = null;
+
+        function startAbsen(status) {
+            selectedStatus = status;
+
+            document.getElementById('cameraSection').classList.remove('hidden');
+
+            navigator.mediaDevices.getUserMedia({
+                video: { facingMode: "user" }
+            })
+            .then(s => {
+                stream = s;
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                Swal.fire("Error", "Tidak bisa mengakses kamera", "error");
+                console.error(err);
+            });
+
+            Swal.fire({
+                title: 'Ambil Foto',
+                text: 'Pastikan wajah terlihat jelas',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+        }
+    </script>
+
+    <!-- Capture Photo -->
+     <script>
+        function capturePhoto() {
+            const context = canvas.getContext('2d');
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            context.drawImage(video, 0, 0);
+
+            canvas.toBlob(blob => {
+                const file = new File([blob], "absensi.jpg", {
+                    type: "image/jpeg"
+                });
+
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                document.getElementById('photo').files = dataTransfer.files;
+
+                preview.src = URL.createObjectURL(blob);
+                preview.classList.remove('hidden');
+
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                }
+
+                Swal.fire({
+                icon: 'success',
+                title: 'Foto berhasil diambil',
+                text: 'Lanjutkan absensi?',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Lanjutkan',
+                cancelButtonText: 'Ambil Ulang',
+            }).then(result => {
+                if (result.isConfirmed) {
+                    confirmSubmit();
+                } else {
+                    preview.classList.add('hidden');
+                    navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: "user" }
+                    }).then(s => {
+                        stream = s;
+                        video.srcObject = stream;
+                    });
+                }
+            });
+            }, 'image/jpeg', 0.95);
+        }
+    </script>
+
+    <!-- Confirm Submit Absen -->
+    <script>
+        function confirmSubmit() {
+            let message = selectedStatus === "masuk"
+                ? "Apakah Anda yakin ingin ABSEN MASUK?"
+                : "Apakah Anda yakin ingin ABSEN PULANG?";
+
+            Swal.fire({
+                title: message,
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Lanjutkan',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then(result => {
+                if (result.isConfirmed) {
+                    submitAbsen();
+                }
+            });
+        }
+
+        function submitAbsen() {
+            let form = document.getElementById('absensiForm');
+
+            let hiddenStatus = document.createElement("input");
+            hiddenStatus.type = "hidden";
+            hiddenStatus.name = "status";
+            hiddenStatus.value = selectedStatus;
+            form.appendChild(hiddenStatus);
+
+            form.submit();
+        }
+    </script>
 
 </x-app-layout>
