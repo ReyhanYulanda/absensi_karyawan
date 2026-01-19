@@ -23,7 +23,7 @@ class SettingController extends Controller
     {
         $request->validate([
             'key' => ['required', 'string', 'max:255', 'unique:settings'],
-            'value' => ['required', 'string', 'max:255'],
+            'value' => ['nullable', 'string', 'max:255'],
         ]);
 
         setting::create([
@@ -43,7 +43,7 @@ class SettingController extends Controller
     {
         $request->validate([
             'key' => ['required', 'string', 'max:255', 'unique:settings,key,' . $setting->id],
-            'value' => ['required', 'string', 'max:255'],
+            'value' => ['nullable', 'string', 'max:255'],
         ]);
 
         $setting->update([

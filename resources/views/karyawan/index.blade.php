@@ -126,9 +126,16 @@
         </div>
 
     <script>
-        const officeLat = {{ config('absensi.office_lat') }};
-        const officeLng = {{ config('absensi.office_lng') }};
-        const maxRadius = {{ config('absensi.radius') }};
+        const officeLat = {{ $officeLat }};
+        const officeLng = {{ $officeLng }};
+        const maxRadius = {{ $maxRadius }};
+
+        console.log({
+            officeLat,
+            officeLng,
+            maxRadius
+        });
+
     </script>
 
     <script>

@@ -25,7 +25,7 @@
                 <label for="value" class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">
                     Value
                 </label>
-                <input type="text" name="value" id="value" required
+                <input type="text" name="value" id="value" 
                        value="{{ old('value') }}"
                        class="w-full border-gray-300 dark:border-gray-600 rounded-lg shadow-sm 
                               focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">

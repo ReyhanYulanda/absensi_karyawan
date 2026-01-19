@@ -11,13 +11,24 @@ use App\Models\User;
 
 class AbsensiController extends Controller
 {
+    
+    
     public function index()
     {
+        $officeLat = (float) setting('place_latitude');
+        $officeLng = (float) setting('place_longitude');
+        $maxRadius = (int) setting('place_radius', 100);
         $absensi = Absensi::where('user_id', Auth::id())
                 ->latest()
                 ->paginate(5);
                 
-        return view('karyawan.index', compact('absensi'));
+        return view('karyawan.index', [
+        'absensi' => $absensi,
+        'officeLat' => (float) setting('place_latitude'),
+        'officeLng' => (float) setting('place_longitude'),
+        'maxRadius' => (int) setting('place_radius'),
+]);
+
     }
 
     public function adminIndex(Request $request)
@@ -52,9 +63,9 @@ class AbsensiController extends Controller
 
     public function store(Request $request, ImageService $imageService)
     {
-        $officeLat = config('absensi.office_lat');
-        $officeLng = config('absensi.office_lng');
-        $maxRadius = config('absensi.radius');
+        $officeLat = (float) setting('place_latitude');
+        $officeLng = (float) setting('place_longitude');
+        $maxRadius = (int) setting('place_radius', 100);
 
         $distance = $this->calculateDistance(
             $request->latitude,
